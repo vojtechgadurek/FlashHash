@@ -15,7 +15,7 @@ namespace LashHashTests
 				for (ulong i = 0; i < 100; i++)
 				{
 					ulong randomSize = (ulong)random.NextInt64();
-					var modulo = new ModuloScheme(randomSize).Get().Compile();
+					var modulo = new ModuloScheme(randomSize).Create().Compile();
 
 					ulong randomValue = (ulong)random.NextInt64();
 					Assert.Equal(modulo(randomValue), randomValue % randomSize);

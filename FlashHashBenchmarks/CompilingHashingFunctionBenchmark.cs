@@ -12,9 +12,6 @@ namespace LashHashBenchmarks
 	{
 		[ParamsSource(nameof(HashingFunctionsToTest))]
 		public Type hashingFunctionFamily;
-
-		public int numberOfDivisions = 16;
-
 		public static IEnumerable<Type> HashingFunctionsToTest()
 		{
 			return HashingFunctionProvider.GetAllHashingFunctionFamilies();
