@@ -1,11 +1,11 @@
-﻿using LashHash.SchemesAndFamilies;
+﻿using FlashHash.SchemesAndFamilies;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LashHash.SchemesAndFamilies
+namespace FlashHash.SchemesAndFamilies
 {
 	public interface IHashingFunctionFamily
 	{

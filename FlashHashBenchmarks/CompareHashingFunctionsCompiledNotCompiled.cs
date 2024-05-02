@@ -36,9 +36,8 @@ namespace FlashHashBenchmarks
 			ulong sum = 0;
 			ulong[] buffer = new ulong[BufferLength];
 			ulong[] answerBuffer = new ulong[BufferLength];
-			Random random = new Random();
 			Action<ulong[], ulong[], int, int> f = LittleSharp.Utils.Buffers.BufferFunction(
-				HashingFunctionProvider.Get(typeof(LinearCongruenceFamily), 1000).Create()).Compile(); ;
+				HashingFunctionProvider.Get(typeof(LinearCongruenceFamily), (ulong)Random.NextInt64(0, 2 << 60)).Create()).Compile(); ;
 
 			while (Stream!.FillBuffer(buffer) > 0)
 			{
@@ -65,6 +64,40 @@ namespace FlashHashBenchmarks
 				for (int i = 0; i < length; i++)
 				{
 					output[start + i] = (input[start + i] * a + b) % prime % size;
+				}
+			};
+
+
+			ulong sum = 0;
+			ulong[] buffer = new ulong[BufferLength];
+			ulong[] answerBuffer = new ulong[BufferLength];
+
+			while (Stream!.FillBuffer(buffer) > 0)
+			{
+				f(buffer, answerBuffer, 0, BufferLength);
+
+				for (int j = 0; j < BufferLength; j++)
+				{
+					sum += answerBuffer[j];
+				}
+			}
+			return sum;
+		}
+
+
+		[Benchmark]
+
+		public ulong BenchmarkBaseLinearCongruence()
+		{
+			ulong a = (ulong)Random!.NextInt64();
+			ulong b = (ulong)Random.NextInt64();
+			ulong size = (ulong)Random.NextInt64(0, 2 << 60);
+			ulong prime = LinearCongruenceScheme.GetGoodPrime(size);
+			Action<ulong[], ulong[], int, int> f = (input, output, start, length) =>
+			{
+				for (int i = 0; i < length; i++)
+				{
+					output[start + i] = (input[start + i] * 122032421 + 129934) % 18338 % 3400;
 				}
 			};
 

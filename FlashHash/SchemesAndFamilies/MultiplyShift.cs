@@ -4,9 +4,9 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
-using LashHash.Utils;
+using FlashHash.Utils;
 
-namespace LashHash.SchemesAndFamilies
+namespace FlashHash.SchemesAndFamilies
 {
 	public class MultiplyShiftFamily : IHashingFunctionFamily<MultiplyShift>
 	{

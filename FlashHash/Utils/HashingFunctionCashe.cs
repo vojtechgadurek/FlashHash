@@ -1,5 +1,5 @@
 ﻿using Gee.External.Capstone.X86;
-using LashHash.SchemesAndFamilies;
+using FlashHash.SchemesAndFamilies;
 using LittleSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
@@ -12,7 +12,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LashHash.Utils
+namespace FlashHash.Utils
 {
 	public class HashingFunctionCache<THashingFunctionScheme> where THashingFunctionScheme : IHashingFunctionScheme
 	{

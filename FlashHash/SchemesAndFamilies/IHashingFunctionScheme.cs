@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LashHash.SchemesAndFamilies
+namespace FlashHash.SchemesAndFamilies
 {
 	public interface IHashingFunctionScheme
 	{

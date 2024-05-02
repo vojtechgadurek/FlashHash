@@ -1,4 +1,4 @@
-﻿using LashHash.SchemesAndFamilies;
+﻿using FlashHash.SchemesAndFamilies;
 using Microsoft.CodeAnalysis.Emit;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-namespace LashHash
+namespace FlashHash
 {
 
 	public static class HashingFunctionProvider

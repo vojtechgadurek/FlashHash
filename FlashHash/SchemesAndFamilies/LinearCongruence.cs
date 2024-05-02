@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using LashHash.Utils;
+using FlashHash.Utils;
 
-namespace LashHash.SchemesAndFamilies
+namespace FlashHash.SchemesAndFamilies
 {
 
 	public record class LinearCongruenceFamily : IHashingFunctionFamily<LinearCongruenceScheme>
