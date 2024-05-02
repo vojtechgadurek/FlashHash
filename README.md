@@ -5,7 +5,7 @@ FlashHash is a fast implementation of many (now two) standard hashing function f
 It provides unlimited hashing functions from these families with the same performance as hashing functions written during compile time.
 
 ## Performance 
-This library provides Circe four times faster hashing functions than functions gained by this approach:
+This library provides four times faster hashing functions than functions gained by this approach:
 
 ``` cs
 var CreateLinearCongruenceHashingFunction = 
