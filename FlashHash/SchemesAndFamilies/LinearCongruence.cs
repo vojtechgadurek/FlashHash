@@ -10,7 +10,7 @@ namespace FlashHash.SchemesAndFamilies
 
 	public record class LinearCongruenceFamily : IHashingFunctionFamily<LinearCongruenceScheme>
 	{
-		Random? _random;
+		Random? _random = new Random();
 
 		public LinearCongruenceScheme GetScheme(ulong size)
 		{

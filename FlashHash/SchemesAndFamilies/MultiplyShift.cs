@@ -10,7 +10,7 @@ namespace FlashHash.SchemesAndFamilies
 {
 	public class MultiplyShiftFamily : IHashingFunctionFamily<MultiplyShift>
 	{
-		private Random _random;
+		private Random _random = new Random();
 		public MultiplyShift GetScheme(ulong size)
 		{
 			return new MultiplyShift((ulong)_random.Next(), size);
