@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FlashHash.SchemesAndFamilies
 {
-	public interface IHashingFunctionScheme
+	public interface IHashingFunctionScheme : IEquatable<IHashingFunctionScheme>
 	{
 		public Expression<HashingFunction> Create();
 	}

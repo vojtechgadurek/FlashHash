@@ -12,6 +12,7 @@ namespace FlashHash.SchemesAndFamilies
 	{
 		Random? _random = new Random();
 
+
 		public LinearCongruenceScheme GetScheme(ulong size)
 		{
 			return new LinearCongruenceScheme((ulong)_random!.Next(), (ulong)_random.Next(), size);
@@ -67,6 +68,15 @@ namespace FlashHash.SchemesAndFamilies
 			var f = new CompiledFunction<ulong, ulong>(out var value);
 			f.S.Assign(f.Output, (value.V * Multiply % GetGoodPrime(Size) + Add) % Size);
 			return f.Construct();
+		}
+
+		public bool Equals(IHashingFunctionScheme? other)
+		{
+			if (other is LinearCongruenceScheme lcs)
+			{
+				return lcs.Multiply == Multiply && lcs.Add == Add && lcs.Size == Size;
+			}
+			return false;
 		}
 	}
 }

@@ -34,6 +34,18 @@ namespace FlashHash.SchemesAndFamilies
 			f.S.Assign(f.Output, (value_.V * Multiply >> 64 - kMerLength) % Size);
 			return f.Construct();
 		}
+
+		public bool Equals(IHashingFunctionScheme? other)
+		{
+			if (other is MultiplyShift ms)
+			{
+				return ms.Size == Size && ms.Multiply == Multiply;
+			}
+			else
+			{
+				return false;
+			}
+		}
 	}
 
 }
