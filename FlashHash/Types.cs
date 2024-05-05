@@ -1,5 +1,5 @@
 ﻿global using Hash = System.UInt64;
-global using HashedValue = System.UInt64;
+global using Key = System.UInt64;
 global using HashingFunction = System.Func<System.UInt64, System.UInt64>;
 global using HashingFunctions = System.Collections.Generic.IEnumerable<System.Linq.Expressions.Expression<System.Func<System.UInt64, System.UInt64>>>;
 
