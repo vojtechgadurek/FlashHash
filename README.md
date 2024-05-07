@@ -1,11 +1,10 @@
 # Flash Hash
 
-## About
-FlashHash is a fast implementation of many (now two) standard hashing function families (Linear Congruence and Multiply Shift). It is based on expression trees. 
-It provides unlimited hashing functions from these families with the same performance as hashing functions written during compile time.
+## Overview
+FlashHash offers a fast implementation of two standard hashing function families: Linear Congruence and Multiply Shift. It leverages expression trees to deliver hashing functions (ulong to ulong) from these families, with performance akin to compile-time implementations.
 
 ## Performance 
-This library provides four times faster hashing functions than functions gained by this approach:
+This library boasts hashing functions four times faster than those generated through conventional means:
 
 ``` cs
 var CreateLinearCongruenceHashingFunction = 
@@ -17,62 +16,62 @@ var CreateLinearCongruenceHashingFunction =
         return (ulong x) => (a * x + b) % size % prime;
     }
 ```
-But the creation process is much more expensive, sitting at 0.5 ms (The code is compiled during runtime). 
+However, the creation process is relatively more resource-intensive, consuming approximately 0.5 ms (as code compilation occurs at runtime).
 
 ## Usage
-There are there main objects: Schemes, Families, Provider
+FlashHash revolves around three primary components: Schemes, Families, and Provider.
 
-Families are abstractions for hashing function families and schemes are descriptions of individual hashing functions.
+Families serve as abstract representations for hashing function families, while schemes describe individual hashing functions.
 
 ### Schemes
 ``` cs
 var scheme = new LinearCongruenceScheme(10, 5, 7)
-//from this scheme, we are going to build this hashingfunction:
+// This scheme yields the following hashing function:
 //  (10*x + 5) % Prime % 7
-// Prime is closet mersene prime greater than size (7)
+// Prime represents the closest Mersene prime greater than the size (7)
 
 Expression<Func<ulong, ulong>> expression = scheme.Create()
-//Building expression tree is not expensive
+// Building an expression tree is not computationally expensive
 
 Func<ulong, ulong> hashingFunction = expression.Compile();
-//Compiling actually is 
+// However, compilation is resource-intensive
 ```
 
 ### Families
 ``` cs
 var family = new LinearCongruenceFamily();
 family.SetRandomness(new Random(42));
-//You can set your own randomness
+// Custom randomness can be set
 ulong size = 10;
 Func<ulong, ulong> hashingFunction = family.GetScheme(size).Create().Compile()
-//Returns random hashing function from linear congruence family
+// Retrieves a random hashing function from the linear congruence family
 ```
 
 ### Provider
-They are useful when you need to get Hashing Functions by their type.
+Providers are valuable when you need to retrieve hashing functions by their type.
 
 ``` cs
 
-//You can set your own randomness
+// Custom randomness can be set
 ulong size = 10;
 Func<ulong, ulong> hashingFunction = HashingFunctionProvider.Get(typeof(LinearCongruenceFamily), size).Create().Compile();
-//Returns random hashing function from linear congruence family
-//HashingFunctionProvider via reflection finds every class implementing IHashingFunctionFamily interface
+// Retrieves a random hashing function from the linear congruence family
+// HashingFunctionProvider uses reflection to identify every class implementing the IHashingFunctionFamily interface
 ```
 
 ### Tips
-As the newly created function is a delegate for better performance you can buffer it:
+As the newly created function is a delegate for better performance, it can be buffered:
 
 ``` cs
 using LittleSharp.Utils
-//You can set your own randomness
+// Custom randomness can be set
 Expression<Func<ulong, ulong>> hashingFunction = HashingFunctionProvider.Get(typeof(LinearCongruenceFamily), size).Create();
 Action<ulong[], ulong[], int, int> bufferedHashingFunction = Buffers.BufferFunction(hashingFunction);
-//Returns random hashing function from linear congruence family
-//HashingFunctionProvider via reflection finds every class implementing IHashingFunctionFamily interface
+// Retrieves a random hashing function from the linear congruence family
+// HashingFunctionProvider uses reflection to identify every class implementing the IHashingFunctionFamily interface
 ```
 
-Also for better expression trees, I advise to check LittleSharp.
+For optimal expression trees, LittleSharp is recommended.
 
 
 
