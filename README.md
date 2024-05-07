@@ -4,7 +4,7 @@
 FlashHash offers a fast implementation of two standard hashing function families: Linear Congruence and Multiply Shift. It leverages expression trees to deliver hashing functions (ulong to ulong) from these families, with performance akin to compile-time implementations.
 
 ## Performance 
-This library boasts hashing functions four times faster than those generated through conventional means:
+This library offer hashing functions four times faster than those generated through conventional means:
 
 ``` cs
 var CreateLinearCongruenceHashingFunction = 
