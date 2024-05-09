@@ -14,23 +14,23 @@ namespace FlashHash.SchemesAndFamilies
 		{
 			_random = random;
 		}
-		public ModuloScheme GetScheme(ulong size)
+		public ModuloScheme GetScheme(ulong size, ulong offset)
 		{
-			return new ModuloScheme(size);
+			return new ModuloScheme(size, offset);
 		}
 
-		IHashingFunctionScheme IHashingFunctionFamily.GetScheme(ulong size)
+		IHashingFunctionScheme IHashingFunctionFamily.GetScheme(ulong size, ulong offset)
 		{
-			return GetScheme(size);
+			return GetScheme(size, offset);
 		}
 
 	}
-	public record struct ModuloScheme(ulong Size) : IHashingFunctionScheme
+	public record struct ModuloScheme(ulong Size, ulong Offset) : IHashingFunctionScheme
 	{
 		public Expression<HashingFunction> Create()
 		{
 			var f = new CompiledFunction<ulong, ulong>(out var value_);
-			f.S.Assign(f.Output, value_.V % Size);
+			f.S.Assign(f.Output, value_.V % Size + Offset);
 			return f.Construct();
 		}
 
@@ -38,7 +38,7 @@ namespace FlashHash.SchemesAndFamilies
 		{
 			if (other is ModuloScheme modulo)
 			{
-				return modulo.Size == Size;
+				return modulo.Size == Size && modulo.Offset == Offset;
 			}
 			else
 			{

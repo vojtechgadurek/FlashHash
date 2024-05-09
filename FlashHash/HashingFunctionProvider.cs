@@ -31,15 +31,15 @@ namespace FlashHash
 		}
 
 		public static IEnumerable<Type> GetAllHashingFunctionFamilies() => hashingFunctions.Keys;
-		public static IHashingFunctionScheme Get<THashingFunctionFamily>(ulong size) where THashingFunctionFamily : IHashingFunctionFamily
+		public static IHashingFunctionScheme Get<THashingFunctionFamily>(ulong size, ulong offset) where THashingFunctionFamily : IHashingFunctionFamily
 		{
 			var family = hashingFunctions[typeof(THashingFunctionFamily)];
-			return family.GetScheme(size);
+			return family.GetScheme(size, offset);
 		}
-		public static IHashingFunctionScheme Get(Type hashingFunctionFamily, ulong size)
+		public static IHashingFunctionScheme Get(Type hashingFunctionFamily, ulong size, ulong offset)
 		{
 			var family = hashingFunctions[hashingFunctionFamily];
-			return family.GetScheme(size);
+			return family.GetScheme(size, offset);
 		}
 
 	}

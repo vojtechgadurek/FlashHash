@@ -9,13 +9,13 @@ namespace FlashHash.SchemesAndFamilies
 {
 	public interface IHashingFunctionFamily
 	{
-		public IHashingFunctionScheme GetScheme(ulong size);
+		public IHashingFunctionScheme GetScheme(ulong size, ulong offset);
 
 		public void SetRandomness(Random random);
 	}
 	public interface IHashingFunctionFamily<THashingFunctionScheme> : IHashingFunctionFamily where THashingFunctionScheme : IHashingFunctionScheme
 	{
-		new public THashingFunctionScheme GetScheme(ulong size);
+		new public THashingFunctionScheme GetScheme(ulong size, ulong offset);
 
 	}
 }

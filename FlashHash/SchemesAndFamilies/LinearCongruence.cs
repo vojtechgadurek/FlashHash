@@ -13,9 +13,9 @@ namespace FlashHash.SchemesAndFamilies
 		Random? _random = new Random();
 
 
-		public LinearCongruenceScheme GetScheme(ulong size)
+		public LinearCongruenceScheme GetScheme(ulong size, ulong offset)
 		{
-			return new LinearCongruenceScheme((ulong)_random!.Next(), (ulong)_random.Next(), size);
+			return new LinearCongruenceScheme((ulong)_random!.Next(), (ulong)_random.Next(), size, offset);
 		}
 
 		public void SetRandomness(Random random)
@@ -23,13 +23,13 @@ namespace FlashHash.SchemesAndFamilies
 			_random = random;
 		}
 
-		IHashingFunctionScheme IHashingFunctionFamily.GetScheme(ulong size)
+		IHashingFunctionScheme IHashingFunctionFamily.GetScheme(ulong size, ulong offset)
 		{
-			return GetScheme(size);
+			return GetScheme(size, offset);
 		}
 	}
 
-	public record struct LinearCongruenceScheme(ulong Multiply, ulong Add, ulong Size) : IHashingFunctionScheme
+	public record struct LinearCongruenceScheme(ulong Multiply, ulong Add, ulong Size, ulong Offset) : IHashingFunctionScheme
 	{
 		static List<int> MersennePrimesExponents = new List<int>
 		{
@@ -66,7 +66,7 @@ namespace FlashHash.SchemesAndFamilies
 		public Expression<HashingFunction> Create()
 		{
 			var f = new CompiledFunction<ulong, ulong>(out var value);
-			f.S.Assign(f.Output, (value.V * Multiply % GetGoodPrime(Size) + Add) % Size);
+			f.S.Assign(f.Output, (value.V * Multiply % GetGoodPrime(Size) + Add) % Size + Offset);
 			return f.Construct();
 		}
 
@@ -74,7 +74,7 @@ namespace FlashHash.SchemesAndFamilies
 		{
 			if (other is LinearCongruenceScheme lcs)
 			{
-				return lcs.Multiply == Multiply && lcs.Add == Add && lcs.Size == Size;
+				return lcs.Multiply == Multiply && lcs.Add == Add && lcs.Size == Size && lcs.Offset == Offset;
 			}
 			return false;
 		}
