@@ -31,6 +31,41 @@ namespace FlashHashBenchmarks
 		}
 
 		[Benchmark]
+		public ulong LinearCongruenceExpressionTreesBetterBuffered()
+		{
+			ulong a = (ulong)Random!.NextInt64();
+			ulong b = (ulong)Random.NextInt64();
+			ulong size = (ulong)Random.NextInt64(0, 2 << 60);
+			ulong prime = LinearCongruenceScheme.GetGoodPrime(size);
+
+			var action = CompiledActions.Create<ulong[], ulong[], int, int>
+				(out var input_, out var output_, out var start_, out var nItems_);
+			action.S.DeclareVariable<int>(out var i_, 0)
+			.Macro(out var input_T, input_.V.ToTable<ulong>())
+			.Macro(out var output_T, output_.V.ToTable<ulong>())
+			.While(i_.V < nItems_.V, new Scope().Assign(output_T[start_.V + i_.V],
+			(input_T[start_.V + i_.V].V * a + b) % prime % size).Assign(i_, i_.V + 1));
+			var f = action.Construct().Compile();
+
+			ulong sum = 0;
+			ulong[] buffer = new ulong[BufferLength];
+			ulong[] answerBuffer = new ulong[BufferLength];
+
+			while (Stream!.FillBuffer(buffer) > 0)
+			{
+				f(buffer, answerBuffer, 0, BufferLength);
+
+				for (int j = 0; j < BufferLength; j++)
+				{
+					sum += answerBuffer[j];
+				}
+			}
+			return sum;
+
+		}
+
+
+		[Benchmark]
 		public ulong LinearCongruenceExpressionTreesBuffered()
 		{
 			ulong sum = 0;
