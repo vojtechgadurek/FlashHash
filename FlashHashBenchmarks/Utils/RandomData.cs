@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LashHashBenchmarks.Utils
+namespace FlashHashBenchmarks.Utils
 {
 	public class RandomData
 	{

@@ -1,13 +1,11 @@
 ﻿using BenchmarkDotNet.Attributes;
-using LashHash.SchemesAndFamilies;
-using LashHash;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LashHashBenchmarks
+namespace FlashHashBenchmarks
 {
 	public class HashingBenchmark
 	{
@@ -39,8 +37,8 @@ namespace LashHashBenchmarks
 		public void IterationSetup()
 		{
 			Stream.Reset();
-			f = LittleSharp.Utils.Buffers.BufferFunction(
-				HashingFunctionProvider.Get(hashingFunctionFamily, 1000).Create()).Compile();
+			f = LittleSharp.Utils.Buffering.BufferFunction(
+				HashingFunctionProvider.Get(hashingFunctionFamily, 1000, 0).Create()).Compile();
 		}
 		[Benchmark]
 		public ulong[] BenchmarkHashingFunctionParallel()
@@ -85,7 +83,7 @@ namespace LashHashBenchmarks
 			return sum;
 		}
 
-		
+
 
 	}
 }

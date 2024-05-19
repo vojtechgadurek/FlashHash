@@ -1,6 +1,4 @@
 ﻿using BenchmarkDotNet.Attributes;
-using LashHash;
-using LashHash.SchemesAndFamilies;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FlashHashBenchmarks
 {
-	public class CompareHashingFunctionsCompiledNotCompiled
+	public class ExplicitDelegateExpressionTreesHashingFunctionBenchmark
 	{
 		public const int Length = 1024;
 		public const int BufferLength = 4096;
@@ -31,13 +29,13 @@ namespace FlashHashBenchmarks
 		}
 
 		[Benchmark]
-		public ulong BenchmarkHashingFunction()
+		public ulong LinearCongruenceExpressionTrees()
 		{
 			ulong sum = 0;
 			ulong[] buffer = new ulong[BufferLength];
 			ulong[] answerBuffer = new ulong[BufferLength];
-			Action<ulong[], ulong[], int, int> f = LittleSharp.Utils.Buffers.BufferFunction(
-				HashingFunctionProvider.Get(typeof(LinearCongruenceFamily), (ulong)Random.NextInt64(0, 2 << 60)).Create()).Compile(); ;
+			Action<ulong[], ulong[], int, int> f = LittleSharp.Utils.Buffering.BufferFunction(
+				HashingFunctionProvider.Get(typeof(LinearCongruenceFamily), (ulong)Random.NextInt64(0, 2 << 60), 0).Create()).Compile(); ;
 
 			while (Stream!.FillBuffer(buffer) > 0)
 			{
@@ -53,7 +51,7 @@ namespace FlashHashBenchmarks
 
 
 		[Benchmark(Baseline = true)]
-		public ulong BenchmarkLinearCongruence()
+		public ulong LinearCongruenceDelegate()
 		{
 			ulong a = (ulong)Random!.NextInt64();
 			ulong b = (ulong)Random.NextInt64();
@@ -87,7 +85,7 @@ namespace FlashHashBenchmarks
 
 		[Benchmark]
 
-		public ulong BenchmarkBaseLinearCongruence()
+		public ulong LinearCongruenceExplicit()
 		{
 			ulong a = (ulong)Random!.NextInt64();
 			ulong b = (ulong)Random.NextInt64();

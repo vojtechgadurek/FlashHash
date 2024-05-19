@@ -1,8 +1,7 @@
-using LashHash.SchemesAndFamilies;
 using System.Numerics;
 using Xunit.Abstractions;
 
-namespace LashHashTests
+namespace FlashHashTests
 {
 	namespace Tests
 	{
@@ -15,7 +14,7 @@ namespace LashHashTests
 				for (ulong i = 0; i < 100; i++)
 				{
 					ulong randomSize = (ulong)random.NextInt64();
-					var modulo = new ModuloScheme(randomSize).Create().Compile();
+					var modulo = new ModuloScheme(randomSize, 0).Create().Compile();
 
 					ulong randomValue = (ulong)random.NextInt64();
 					Assert.Equal(modulo(randomValue), randomValue % randomSize);
@@ -56,7 +55,7 @@ namespace LashHashTests
 				var families = HashingFunctionProvider.GetAllHashingFunctionFamilies();
 				foreach (var family in families)
 				{
-					var scheme = HashingFunctionProvider.Get(family, 42);
+					var scheme = HashingFunctionProvider.Get(family, 42, 0);
 
 					_output.WriteLine(scheme.ToString());
 					Assert.NotNull(scheme);

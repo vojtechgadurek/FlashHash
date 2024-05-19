@@ -6,13 +6,16 @@ using System.Threading.Tasks;
 using BenchmarkDotNet.Running;
 using FlashHashBenchmarks;
 
-namespace LashHashBenchmarks
+namespace FlashHashBenchmarks
 {
 	public class Program
 	{
 		public static void Main(string[] args)
 		{
-			var summary = BenchmarkRunner.Run<CompareHashingFunctionsCompiledNotCompiled>();
+			if (args[1] == "Explicit-Delegate-ExpressionTrees")
+			{
+				var summary = BenchmarkRunner.Run<ExplicitDelegateExpressionTreesHashingFunctionBenchmark>();
+			}
 		}
 	}
 }
