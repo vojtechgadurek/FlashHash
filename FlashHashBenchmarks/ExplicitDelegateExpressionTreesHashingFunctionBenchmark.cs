@@ -1,6 +1,8 @@
 ﻿using BenchmarkDotNet.Attributes;
+using Microsoft.Diagnostics.Tracing.StackSources;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,7 +31,7 @@ namespace FlashHashBenchmarks
 		}
 
 		[Benchmark]
-		public ulong LinearCongruenceExpressionTrees()
+		public ulong LinearCongruenceExpressionTreesBuffered()
 		{
 			ulong sum = 0;
 			ulong[] buffer = new ulong[BufferLength];
@@ -49,9 +51,29 @@ namespace FlashHashBenchmarks
 			return sum;
 		}
 
+		[Benchmark]
+		public ulong LinearCongruenceExpressionTrees()
+		{
+			ulong sum = 0;
+			ulong[] buffer = new ulong[BufferLength];
+			ulong[] answerBuffer = new ulong[BufferLength];
+			Func<ulong, ulong> f =
+				HashingFunctionProvider.Get(typeof(LinearCongruenceFamily), (ulong)Random.NextInt64(0, 2 << 60), 0).Create().Compile();
+
+			while (Stream!.FillBuffer(buffer) > 0)
+			{
+				for (int j = 0; j < BufferLength; j++)
+				{
+					sum += f(buffer[j]);
+				}
+
+			}
+			return sum;
+		}
+
 
 		[Benchmark(Baseline = true)]
-		public ulong LinearCongruenceDelegate()
+		public ulong LinearCongruenceDelegateBuffered()
 		{
 			ulong a = (ulong)Random!.NextInt64();
 			ulong b = (ulong)Random.NextInt64();
@@ -82,10 +104,32 @@ namespace FlashHashBenchmarks
 			return sum;
 		}
 
+		[Benchmark]
+		public ulong LinearCongruenceDelegate()
+		{
+			ulong sum = 0;
+			ulong a = (ulong)Random!.NextInt64();
+			ulong b = (ulong)Random.NextInt64();
+			ulong size = (ulong)Random.NextInt64(0, 2 << 60);
+			ulong prime = LinearCongruenceScheme.GetGoodPrime(size);
+			ulong[] buffer = new ulong[BufferLength];
+			ulong[] answerBuffer = new ulong[BufferLength];
+			Func<ulong, ulong> f = (input) => (input * a + b) % prime % size;
+
+			while (Stream!.FillBuffer(buffer) > 0)
+			{
+				for (int j = 0; j < BufferLength; j++)
+				{
+					sum += f(buffer[j]);
+				}
+
+			}
+			return sum;
+		}
 
 		[Benchmark]
 
-		public ulong LinearCongruenceExplicit()
+		public ulong LinearCongruenceExplicitBuffered()
 		{
 			ulong a = (ulong)Random!.NextInt64();
 			ulong b = (ulong)Random.NextInt64();
@@ -115,5 +159,28 @@ namespace FlashHashBenchmarks
 			}
 			return sum;
 		}
+		[Benchmark]
+		public ulong LinearCongruenceExplicit()
+		{
+			ulong sum = 0;
+			ulong a = (ulong)Random!.NextInt64();
+			ulong b = (ulong)Random.NextInt64();
+			ulong size = (ulong)Random.NextInt64(0, 2 << 60);
+			ulong prime = LinearCongruenceScheme.GetGoodPrime(size);
+			ulong[] buffer = new ulong[BufferLength];
+			ulong[] answerBuffer = new ulong[BufferLength];
+			Func<ulong, ulong> f = (input) => (input * 122032421 + 129934) % 18338 % 3400;
+
+			while (Stream!.FillBuffer(buffer) > 0)
+			{
+				for (int j = 0; j < BufferLength; j++)
+				{
+					sum += f(buffer[j]);
+				}
+
+			}
+			return sum;
+		}
+
 	}
 }
