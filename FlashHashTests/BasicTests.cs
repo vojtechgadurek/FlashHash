@@ -28,40 +28,91 @@ namespace FlashHashTests
 
 		}
 
-
-		public class HashingFunctionProviderTest
+		public class TabulationHashing
 		{
-			//output is a list of all hashing function families
-
-			private readonly ITestOutputHelper _output;
-			public HashingFunctionProviderTest(ITestOutputHelper output)
-			{
-				_output = output;
-			}
 			[Fact]
-			public void TestGetAllHashingFunctionFamilies()
+			void BasicTest()
 			{
-				var families = HashingFunctionProvider.GetAllHashingFunctionFamilies();
-				foreach (var family in families)
+				ulong[][] table = new ulong[8][];
+				for (ulong i = 0; i < 8; i++)
 				{
-					_output.WriteLine(family.ToString());
+					table[i] = new ulong[256];
 				}
-				Assert.NotEmpty(families);
+
+				table[0][1] = 1;
+
+				var tabulation = new TabulationScheme(table, 10, 0).Create().Compile();
+
+				Assert.Equal(1UL, tabulation(1));
+
+				table[0][1] = 3;
+
+				Assert.Equal(3UL, tabulation(1));
+
+				table[0][1] = 0;
+
+
+				table[1][1] = 4;
+
+				Assert.Equal(4UL, tabulation(0b1_0000_0000));
+
+
+				table[0][2] = 4;
+
+				Assert.Equal(0UL, tabulation(0b1_0000_0010));
+
+				var fam = new TabulationFamily();
+
+				var h1 = fam.GetScheme(10, 0);
+				var h2 = fam.GetScheme(10, 0);
+
+				var x = 0;
+
+
+
+
+
+
+
+
+
 			}
 
-			[Fact]
-			public void TestGet()
-			{
-				var families = HashingFunctionProvider.GetAllHashingFunctionFamilies();
-				foreach (var family in families)
-				{
-					var scheme = HashingFunctionProvider.Get(family, 42, 0);
 
-					_output.WriteLine(scheme.ToString());
-					Assert.NotNull(scheme);
+			public class HashingFunctionProviderTest
+			{
+				//output is a list of all hashing function families
+
+				private readonly ITestOutputHelper _output;
+				public HashingFunctionProviderTest(ITestOutputHelper output)
+				{
+					_output = output;
+				}
+				[Fact]
+				public void TestGetAllHashingFunctionFamilies()
+				{
+					var families = HashingFunctionProvider.GetAllHashingFunctionFamilies();
+					foreach (var family in families)
+					{
+						_output.WriteLine(family.ToString());
+					}
+					Assert.NotEmpty(families);
+				}
+
+				[Fact]
+				public void TestGet()
+				{
+					var families = HashingFunctionProvider.GetAllHashingFunctionFamilies();
+					foreach (var family in families)
+					{
+						var scheme = HashingFunctionProvider.Get(family, 42, 0);
+
+						_output.WriteLine(scheme.ToString());
+						Assert.NotNull(scheme);
+					}
 				}
 			}
+
 		}
-
 	}
 }
