@@ -37,44 +37,30 @@ namespace FlashHashTests
 				for (ulong i = 0; i < 8; i++)
 				{
 					table[i] = new ulong[256];
+
+					for (ulong j = 0; j < 256; j++)
+					{
+						table[i][j] = j << (int)(i * 8);
+					}
 				}
 
-				table[0][1] = 1;
+				var m = Map.GetMap(Enumerable.Range(0, 256).Select(x => (ulong)x).Zip(table[0])).Compile();
 
-				var tabulation = new TabulationScheme(table, 10, 0).Create().Compile();
+				for (ulong i = 0; i < 256; i++) Assert.Equal(i, m(i));
+				const ulong size = 10;
 
-				Assert.Equal(1UL, tabulation(1));
-
-				table[0][1] = 3;
-
-				Assert.Equal(3UL, tabulation(1));
-
-				table[0][1] = 0;
+				var tab = new TabulationScheme(table, size, 0);
+				var hf = tab.Create().Compile();
 
 
-				table[1][1] = 4;
-
-				Assert.Equal(4UL, tabulation(0b1_0000_0000));
+				for (ulong i = 0; i < 256; i++) Assert.Equal(i % size, hf(i));
 
 
-				table[0][2] = 4;
-
-				Assert.Equal(0UL, tabulation(0b1_0000_0010));
-
-				var fam = new TabulationFamily();
-
-				var h1 = fam.GetScheme(10, 0);
-				var h2 = fam.GetScheme(10, 0);
-
-				var x = 0;
-
-
-
-
-
-
-
-
+				for (ulong i = 0; i < 1000; i++)
+				{
+					var ran = (ulong)Random.Shared.NextInt64();
+					Assert.Equal(ran % size, hf(ran));
+				}
 
 			}
 
