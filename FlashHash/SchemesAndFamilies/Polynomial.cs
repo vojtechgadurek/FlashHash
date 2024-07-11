@@ -12,6 +12,9 @@ namespace FlashHash.SchemesAndFamilies
 		Random? _random = new Random();
 		int _polynomialOrder = 2;
 
+		public PolynomialFamily()
+		{
+		}
 		public PolynomialFamily(int polynomialOrder)
 		{
 			_polynomialOrder = polynomialOrder;
@@ -64,8 +67,10 @@ namespace FlashHash.SchemesAndFamilies
 				MersennePrimes.Add((2UL << exponent) - 1UL);
 			}
 		}
-		public static ulong GetGoodPrime(ulong size)
+		public ulong GetGoodPrime(ulong size)
 		{
+			//https://mj.ucw.cz/vyuka/dsnotes/06-hash.pdf page 7 collorary 
+			ulong requiredPrime = size * 2 * ((ulong)Coefficients.Length - 1);
 			var index = MersennePrimes.FindIndex(x => x > size);
 			if (index == -1)
 			{

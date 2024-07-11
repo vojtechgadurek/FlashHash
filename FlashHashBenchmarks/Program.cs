@@ -12,9 +12,8 @@ namespace FlashHashBenchmarks
 	{
 		public static void Main(string[] args)
 		{
-			if (args[0] == "Explicit-Delegate-ExpressionTrees")
 			{
-				var summary = BenchmarkRunner.Run<ExplicitDelegateExpressionTreesHashingFunctionBenchmark>();
+				var summary = BenchmarkRunner.Run<HashingBenchmark>();
 			}
 		}
 	}

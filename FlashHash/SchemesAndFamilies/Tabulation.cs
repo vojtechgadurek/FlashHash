@@ -28,7 +28,7 @@ namespace FlashHash.SchemesAndFamilies
 				for (int j = 0; j < 256; j++)
 				{
 					t[j] =
-						(((ulong)RandomNumberGenerator.GetInt32(int.MinValue, int.MaxValue) << 32)) + ((ulong)RandomNumberGenerator.GetInt32(int.MinValue, int.MaxValue));
+						((((ulong)RandomNumberGenerator.GetInt32(int.MinValue, int.MaxValue)) << 32)) + ((ulong)RandomNumberGenerator.GetInt32(int.MinValue, int.MaxValue));
 				}
 			}
 			return table;

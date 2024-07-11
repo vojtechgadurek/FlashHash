@@ -17,8 +17,8 @@ namespace FlashHashBenchmarks
 			return HashingFunctionProvider.GetAllHashingFunctionFamilies();
 		}
 
-		public const int Length = 1024;
-		public const int BufferLength = 4096;
+		public const int Length = 4 * 1024;
+		public const int BufferLength = 1096;
 		public const int DataLength = Length * BufferLength;
 		public Random Random = new Random();
 		public RandomData Stream;
@@ -40,7 +40,6 @@ namespace FlashHashBenchmarks
 			f = LittleSharp.Utils.Buffering.BufferFunction(
 				HashingFunctionProvider.Get(hashingFunctionFamily, 1000, 0).Create()).Compile();
 		}
-		[Benchmark]
 		public ulong[] BenchmarkHashingFunctionParallel()
 		{
 
