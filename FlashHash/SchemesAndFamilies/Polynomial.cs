@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FlashHash.SchemesAndFamilies
 {
-	public record class PolynomialFamily : IHashingFunctionFamily<PolynomialScheme>
+	public record class PolynomialFamily : IHashFunctionFamily<PolynomialScheme>
 	{
 		Random? _random = new Random();
 		int _polynomialOrder = 2;
@@ -23,7 +23,7 @@ namespace FlashHash.SchemesAndFamilies
 		{
 			ulong[] c = new ulong[polynomialOrder + 1];
 			for (int i = 0; i < c.Length; i++) c[i] =
-					(ulong)(RandomNumberGenerator.GetInt32(int.MinValue, int.MaxValue) << 32)
+					(((ulong) RandomNumberGenerator.GetInt32(int.MinValue, int.MaxValue)) << 32)
 					+ ((ulong)RandomNumberGenerator.GetInt32(int.MinValue, int.MaxValue));
 			return c;
 		}
@@ -37,13 +37,13 @@ namespace FlashHash.SchemesAndFamilies
 			_random = random;
 		}
 
-		IHashingFunctionScheme IHashingFunctionFamily.GetScheme(ulong size, ulong offset)
+		IHashFunctionScheme IHashFunctionFamily.GetScheme(ulong size, ulong offset)
 		{
 			return GetScheme(size, offset);
 		}
 	}
 
-	public record struct PolynomialScheme(ulong[] Coefficients, ulong Size, ulong Offset) : IHashingFunctionScheme
+	public record struct PolynomialScheme(ulong[] Coefficients, ulong Size, ulong Offset) : IHashFunctionScheme
 	{
 		static List<int> MersennePrimesExponents = new List<int>
 		{
@@ -93,7 +93,7 @@ namespace FlashHash.SchemesAndFamilies
 			f.S.Assign(f.Output, (f.Output.V % GetGoodPrime(Size) % Size) + Offset);
 			return f.Construct();
 		}
-		public bool Equals(IHashingFunctionScheme? other)
+		public bool Equals(IHashFunctionScheme? other)
 		{
 			if (other is PolynomialScheme lcs)
 			{

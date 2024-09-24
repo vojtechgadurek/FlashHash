@@ -14,19 +14,19 @@ using System.Threading.Tasks;
 
 namespace FlashHash.Utils
 {
-	public class HashingFunctionCache<THashingFunctionScheme> where THashingFunctionScheme : IHashingFunctionScheme
-	{
-		private readonly IDictionary<THashingFunctionScheme, Expression<HashingFunction>> _cache
-			= new Dictionary<THashingFunctionScheme, Expression<HashingFunction>>();
+    public class HashingFunctionCache<THashingFunctionScheme> where THashingFunctionScheme : IHashFunctionScheme
+    {
+        private readonly IDictionary<THashingFunctionScheme, Expression<HashingFunction>> _cache
+            = new Dictionary<THashingFunctionScheme, Expression<HashingFunction>>();
 
-		public Expression<HashingFunction> Get(THashingFunctionScheme scheme, bool cacheResult = true)
-		{
-			if (!_cache.TryGetValue(scheme, out var value))
-			{
-				value = scheme.Create();
-				if (cacheResult) _cache[scheme] = value;
-			}
-			return value;
-		}
-	}
+        public Expression<HashingFunction> Get(THashingFunctionScheme scheme, bool cacheResult = true)
+        {
+            if (!_cache.TryGetValue(scheme, out var value))
+            {
+                value = scheme.Create();
+                if (cacheResult) _cache[scheme] = value;
+            }
+            return value;
+        }
+    }
 }
